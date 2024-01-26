@@ -63,14 +63,38 @@ const handleRefreshToken = asyncHandler(async (req, res) => {
     jwt.verify(refreshToken, process.env.JWT_SECRET, (err, decoded) => {
         if (err || user.id !== decoded.id) {
             throw new Error('There is something wrong witch refresh token')
-        } 
+        }
         const accessToken = generateToken(user?.id)
-        res.json({accessToken})
+        res.json({ accessToken })
     })
 })
 
 //Logout
-
+const logout = asyncHandler(async (req, res) => {
+    const cookie = req.cookies;
+    if (!cookie?.refreshToken) {
+        throw new Error('No Refresh Token in Cookies')
+    }
+    const refreshToken = cookie.refreshToken;
+    const user = await User.findOne({
+        refreshToken
+    })
+    if (!user) {
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: true,
+        })
+        return res.sendStatus(204); //forbidden
+    }
+    await User.findOneAndUpdate({refreshToken}, {
+        refreshToken: " ",
+    })
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+    })
+    res.sendStatus(204); //forbidden
+})
 
 //Update User
 const updateUser = asyncHandler(async (req, res) => {
@@ -161,4 +185,4 @@ const unblockUser = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken }
+module.exports = { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout }
