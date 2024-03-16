@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart } = require('../controller/userCtrl')
+const { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart } = require('../controller/userCtrl')
 const { authMiddleware, isAdmin } = require('../middlewares/authMiddleware')
 
 router.post('/register', createUser)
@@ -11,14 +11,16 @@ router.put('/password', authMiddleware, updatePassword)
 router.post('/login', login)
 router.post('/admin-login', loginAdmin)
 
-router.post('/cart', userCart)
+router.post('/cart', authMiddleware, userCart)
 
 router.get('/all-users', getAllUsers)
 router.get('/refreshtoken', handleRefreshToken)
 router.get('/logout', logout)
 router.get('/wishlist', authMiddleware, getWishList)
-router.get('/:id', authMiddleware, isAdmin, getUser)
+router.get('/cart', authMiddleware, getUserCart)
 
+router.get('/:id', authMiddleware, isAdmin, getUser)
+router.delete('/empty-cart', authMiddleware, emptyCart)
 router.delete('/:id', deleteUser)
 
 router.put('/edit-user', authMiddleware, updateUser)
