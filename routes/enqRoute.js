@@ -8,6 +8,6 @@ router.post('/', createEnquiry)
 router.put('/:id', authMiddleware, isAdmin, updateEnquiry)
 router.delete('/:id', authMiddleware, isAdmin, deteleEnquiry)
 router.get('/:id', getEnquiry)
-router.get('/', authMiddleware, isAdmin, getAllEnquiries)
+router.get('/', getAllEnquiries)
 
 module.exports = router
