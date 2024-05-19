@@ -176,5 +176,14 @@ const rating = asyncHandler(async (req, res) => {
     }
 })
 
+const deleteAllProduct = asyncHandler(async(req,res)=>{
+    try {
+        const deleteAllProduct = await Product.deleteMany();
+        res.json('success')
+    } catch (error) {
+        throw new Error(error)
+    }
+})
 
-module.exports = { createProduct, getProduct, getAllProduct, updateProduct, deleteProduct, addToWishList, rating, }
+
+module.exports = { deleteAllProduct, createProduct, getProduct, getAllProduct, updateProduct, deleteProduct, addToWishList, rating, }
