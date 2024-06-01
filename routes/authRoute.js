@@ -1,7 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart, applyCoupon, createOrder, getOrders, updateOrderStatus, getAllOrders, getOrderByUserId } = require('../controller/userCtrl')
+const { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart, applyCoupon, createOrder, getOrders, updateOrderStatus, getAllOrders, getOrderByUserId, removeProductFromCart, updateProductQuantityFromCart } = require('../controller/userCtrl')
 const { authMiddleware, isAdmin } = require('../middlewares/authMiddleware')
+const { checkout, paymentVerification } = require('../controller/paymentCtrl')
 
 router.post('/register', createUser)
 router.post('/forgot-password-token', forgotPasswordToken)
@@ -13,8 +14,10 @@ router.post('/login', login)
 router.post('/admin-login', loginAdmin)
 
 router.post('/cart', authMiddleware, userCart)
+router.post('/order/checkout', authMiddleware, checkout)
+router.post('/order/paymentVerification', authMiddleware, paymentVerification)
 router.post('/cart/applycoupon', authMiddleware, applyCoupon)
-router.post('/cart/cash-order', authMiddleware, createOrder)
+router.post('/cart/create-order', authMiddleware, createOrder)
 
 router.get('/all-users', getAllUsers)
 router.get('/get-orders', authMiddleware, getOrders)
@@ -27,6 +30,8 @@ router.get('/cart', authMiddleware, getUserCart)
 
 router.get('/:id', authMiddleware, isAdmin, getUser)
 router.delete('/empty-cart', authMiddleware, emptyCart)
+router.delete('/delete-product-cart/:cartItemId', authMiddleware, removeProductFromCart)
+router.delete('/update-product-cart/:cartItemId/:newQuantity', authMiddleware, updateProductQuantityFromCart)
 router.delete('/:id', deleteUser)
 
 router.put('/edit-user', authMiddleware, updateUser)
