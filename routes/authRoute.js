@@ -1,25 +1,26 @@
 const express = require('express')
 const router = express.Router()
-const { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart, applyCoupon, createOrder, getOrders, updateOrderStatus, getAllOrders, getOrderByUserId, removeProductFromCart, updateProductQuantityFromCart } = require('../controller/userCtrl')
+const { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart, applyCoupon, createOrder, getOrders, updateOrderStatus, getAllOrders, getOrderByUserId, removeProductFromCart, updateProductQuantityFromCart, getMyOrders } = require('../controller/userCtrl')
 const { authMiddleware, isAdmin } = require('../middlewares/authMiddleware')
 const { checkout, paymentVerification } = require('../controller/paymentCtrl')
 
 router.post('/register', createUser)
 router.post('/forgot-password-token', forgotPasswordToken)
 router.put('/reset-password/:token', resetPassword)
-router.put('/order/update-order/:id', authMiddleware, isAdmin, updateOrderStatus)
-
 router.put('/password', authMiddleware, updatePassword)
 router.post('/login', login)
 router.post('/admin-login', loginAdmin)
-
 router.post('/cart', authMiddleware, userCart)
 router.post('/order/checkout', authMiddleware, checkout)
 router.post('/order/paymentVerification', authMiddleware, paymentVerification)
-router.post('/cart/applycoupon', authMiddleware, applyCoupon)
 router.post('/cart/create-order', authMiddleware, createOrder)
 
+router.put('/order/update-order/:id', authMiddleware, isAdmin, updateOrderStatus)
+
+router.post('/cart/applycoupon', authMiddleware, applyCoupon)
+
 router.get('/all-users', getAllUsers)
+router.get('/getmyorders', authMiddleware, getMyOrders)
 router.get('/get-orders', authMiddleware, getOrders)
 router.get('/getallorders', authMiddleware, isAdmin, getAllOrders)
 router.post("/getorderbyuser/:id", authMiddleware, isAdmin, getAllOrders)

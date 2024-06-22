@@ -3,8 +3,6 @@ const Product = require('../models/productModel')
 const asyncHandler = require('express-async-handler');
 const slugify = require('slugify');
 const validateMongoDbId = require('../utils/validateMongodbId');
-const { cloudinaryUploadImg, cloudinaryDeleteImg } = require('../utils/cloudinary');
-const fs = require('fs')
 
 const createProduct = asyncHandler(async (req, res) => {
     try {
@@ -36,7 +34,7 @@ const deleteProduct = asyncHandler(async (req, res) => {
     const { id } = req.params
     validateMongoDbId(id)
     try {
-        const deleteProduct = await Product.findOneAndDelete({ _id: id })
+        const deleteProduct = await Product.findOneAndDelete(id)
         res.json(deleteProduct)
     } catch (error) {
         throw new Error(error)
@@ -184,4 +182,4 @@ const deleteAllProduct = asyncHandler(async (req, res) => {
 })
 
 
-module.exports = { deleteAllProduct, createProduct, getProduct, getAllProduct, updateProduct, deleteProduct, addToWishList, rating, }
+module.exports = { deleteAllProduct, createProduct, getProduct, getAllProduct, updateProduct, deleteProduct, addToWishList, rating }

@@ -28,6 +28,10 @@ var orderSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        other: {
+            type: String,
+            required: true,
+        },
         pincode: {
             type: Number,
             required: true,
@@ -69,15 +73,19 @@ var orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    totalPrice:{
-        type: Number, 
+    month: {
+        type: Number,
+        default: new Date().getMonth(),
+    },
+    totalPrice: {
+        type: Number,
         required: true
     },
-    totalPriceAfterDiscount:{
-        type: Number, 
+    totalPriceAfterDiscount: {
+        type: Number,
         required: true
     },
-    orderStatus:{
+    orderStatus: {
         type: String,
         default: "Ordered"
     }

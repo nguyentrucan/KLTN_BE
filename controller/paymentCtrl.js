@@ -1,17 +1,18 @@
 const Razorpay = require('razorpay')
 
 const instance = new Razorpay({
-    key_id: "rzp_test_jk96M1tbCBGW2H",
-    key_secret: "XQoOhx6YjCyCmJIGtYJaWAhg",
+    key_id: "rzp_test_HSSeDI22muUrLR",
+    key_secret: "sRO0YkBxvgMg0PvWHJN16Uf7",
 })
 
 const checkout = async (req, res) => {
     const { amount } = req.body
     const option = {
-        amount: amount,
-        currency: "USD"
+        amount: amount * 100,
+        currency: "INR",
     }
     const order = await instance.orders.create(option)
+
     res.json({
         success: true,
         order

@@ -413,6 +413,20 @@ const createOrder = asyncHandler(async (req, res) => {
         throw new Error(error)
     }
 })
+
+const getMyOrders = asyncHandler(async (req, res) => {
+    const { _id } = req.user
+
+    try {
+        const orders = await Order.find({ user: _id }).populate("user").populate("orderItems.product").populate("orderItems.color")
+        res.json({
+            orders
+        })
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
 // const createOrder = asyncHandler(async (req, res) => {
 //     const { COD, couponApplied } = req.body
 //     const { _id } = req.user
@@ -517,4 +531,4 @@ const updateOrderStatus = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart, applyCoupon, createOrder, getOrders, updateOrderStatus, getAllOrders, getOrderByUserId, removeProductFromCart, updateProductQuantityFromCart }
+module.exports = { createUser, login, getAllUsers, getUser, deleteUser, updateUser, blockUser, unblockUser, handleRefreshToken, logout, updatePassword, forgotPasswordToken, resetPassword, loginAdmin, getWishList, saveAddress, userCart, getUserCart, emptyCart, applyCoupon, createOrder, getOrders, updateOrderStatus, getAllOrders, getOrderByUserId, removeProductFromCart, updateProductQuantityFromCart, getMyOrders }
